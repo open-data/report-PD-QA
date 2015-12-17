@@ -1,0 +1,849 @@
+- dataset_type: contracts
+  fields:
+
+  - datastore_id: ref_number
+    label: Reference Number / Numéro de référence
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+       mandatory:
+          proposition:
+             rule: [length, '>', '0']
+    format type: Free text
+    validation:
+        - not empty: mandatory
+    mask: N/A
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+              - Please supply a Reference Number for rows
+              - . The Reference Number field cannot be empty.
+
+  - datastore_id: vendor_name
+    label: Vendor Name / Nom du fournisseur
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+       mandatory:
+          proposition:
+             rule: [length,'>','0']
+    format type: Free text
+    validation:
+       - not empty: mandatory
+    mask: N/A
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a Vendor Name for rows
+             - . The Vendor Name field cannot be empty.
+
+
+  - datastore_id: contract_date
+    label: Contract Date / Date du contrat
+    datastore_type: date
+    mandatory: Yes
+    business rules:
+       mandatory:
+          proposition:
+            rule: [length,'>','0']
+       format:
+          antecedent:
+            - rule: [length,'>','0']
+          consequent:
+             rule: [date,'%Y-%m-%d']
+    validation:
+       - not empty: mandatory
+       - format: format
+    mask: YYYY-MM-DD
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a Contract Date for rows
+             - . The Contract Date field cannot be empty. The format to respect is YYYY-MM-DD
+       format:
+          type: Invalid Date format
+          msg:
+             - Please provide a valid Contract Date for rows
+             - . The format to respect is YYYY-MM-DD
+
+  - datastore_id: description_en
+    label: Description of Work English / Description du travail anglaise
+    datastore_type: text
+    mandatory: Conditional Yes
+    business rules:
+       mandatory:
+           antecedent:
+             - field name: contract_value
+               rule: [value,'>', '10000']
+           consequent:
+              rule: [length,'>','0']
+       length limit:
+           proposition:
+             rule: [length,'<=','1000']
+       action: Whenever the code is supplied without a text descriptor, the system will automatically insert a text descriptor based on either the ECON list of codes or the UNSPSC list of codes.
+    format type: Free text
+    validation:
+       - not empty: mandatory
+       - length limit: length limit
+    mask: N/A
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+              - Please supply a Description of Work for rows
+              - . The Description of Work field cannot be empty
+       length limit:
+          type: Invalid Text length
+          msg:
+              - Description of Work for rows
+              -  exceeds 1,000 character limit
+
+
+  - datastore_id: description_fr
+    label: Description of Work French / Description du travail française
+    datastore_type: text
+    mandatory: Conditional Yes
+    business rules:
+        mandatory:
+           antecedent:
+              - field name: contract_value
+                rule: [value,'>', '10000']
+           consequent:
+             rule: [length,'>','0']
+        length limit:
+           proposition:
+             rule: [length,'<=','1000']
+        action: Whenever the code is supplied without a text descriptor, the system will automatically insert a text descriptor based on either the ECON list of codes or the UNSPSC list of codes.
+    format type: Free text
+    validation:
+       - not empty: mandatory
+       - length limit: length limit
+    mask: N/A
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+             - Please supply a Description of Work for rows
+             - . The Description of Work field cannot be empty
+        length limit:
+           type: Invalid Text length
+           msg:
+              - Description of Work for rows
+              -  exceeds 1,000 character limit
+
+
+  - datastore_id: contract_period_start
+    label: Contract Period Start Date / Date de début du contrat
+    datastore_type: date
+    mandatory: Conditional yes for contracts over $10K. Not mandatory for contracts $10K and under.
+    business rules:
+       mandatory:
+          antecedent:
+             -  field name: commodity_type_code
+                rule: [array,in, 'S,C']
+
+             -  field name: contract_value
+                rule: [value,'>', '10000']
+
+          consequent:
+                rule: [length,'>','0']
+
+       empty:
+          antecedent:
+             -  field name: commodity_type_code
+                rule: [string,'==', 'G']
+          consequent:
+                rule: [length,'==', '0']
+       format:
+          antecedent:
+             -  rule: [length,'>','0']
+          consequent:
+             rule: [date, '%Y-%m-%d']
+
+    format type: date
+    validation:
+       - empty: empty
+       - not empty: mandatory
+       - format: format
+    mask: YYYY-MM-DD
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+              - Please supply a valid Contract Period Start Date for rows
+              - . All service contracts (Commodity Type = S) require a Contract Period Start Date. The format to respect is YYYY-MM-DD.
+        format:
+           type: Invalid Date format
+           msg:
+               - Please correct the date format of the Contract Period Start Date for rows
+               - . The format to respect is YYYY-MM-DD.
+        empty:
+           type: Non-empty cell for Goods (Commodity Type = G) contracts
+           msg:
+               - Row
+               -  has a Commodity Type of G for Goods which requires a Delivery Date and not a Contract Period Start Date. Please either change the Commodity Type to S or remove the date from the Contract Period Start Date field for Row X.
+
+
+  - datastore_id: delivery_date
+    label: Contract Period End Date or Delivery Date / Date de clôture du contrat ou Date de livraison
+    datastore_type: date
+    mandatory: Conditional Yes
+    business rules:
+       mandatory:
+          antecedent:
+             - field name: contract_value
+               rule: [value, '>', '10000']
+          consequent:
+              rule: [length,'>', '0']
+       format:
+          antecedent:
+             - rule: [length,'>', '0']
+          consequent:
+             rule: [date,'%Y-%m-%d']
+
+    format type: date
+    validation:
+       - not empty: mandatory
+       - format: format
+    mask: YYYY-MM-DD
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Contract Period End Date or Delivery Date for rows
+             - . The format to respect is YYYY-MM-DD.
+       format:
+          type: Invalid Date format
+          msg:
+             - Please correct the date format of the Contract Period End Date or Delivery Date supplied on row(s)
+             - . The format to respect is YYYY-MM-DD.
+
+
+  - datastore_id: contract_value
+    label: Total Contract Value / Valeur totale du contrat
+    datastore_type: money
+    mandatory: Yes
+    business rules:
+       mandatory:
+         proposition:
+            rule: [length,'>', '0']
+       format:
+          antecedent:
+            - rule: [length,'>', '0']
+          consequent:
+            rule: [match, '(\d{1,13}|\d{1,13}[.]\d{1,2})']
+       action: Characters such as spaces, commas and dollar signs should be automatically removed.
+    format type: Floating point
+    validation:
+       - not empty: mandatory
+       - format: format
+    mask: \d{1,13}(/.\d{1,2}|\d{1,3})
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Total Contract Value for rows
+             - . The Total Contract Value cannot be empty. The format to respect is "#############.##"
+       format:
+          type: Invalid characters
+          msg:
+             - Please enter a valid Total Contract Value. Rows
+             -  currently have an invalid Total Contract Value. The format to respect is "#############.##"
+
+  - datastore_id: original_value
+    label: Original Contract Value / Valeur d'origine du contrat
+    datastore_type: money
+    mandatory: Conditional Yes
+    business rules:
+       mandatory:
+          proposition:
+              rule: [length, '>', '0']
+       format:
+          antecedent:
+            - rule: [length, '>', '0']
+          consequent:
+            rule: [match,'(\d{1,13}|\d{1,13}[.]\d{1,2})']
+    format type: Floating point
+    validation:
+       - not empty: mandatory
+       - format: format
+    mask: (\d{1,13}|\d{1,13}[.]\d{1,2})
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+           - Please supply a valid Total Contract Value for rows
+           - . The Total Contract Value cannot be empty. The format to respect is "#############.##"
+       format:
+          type: Invalid characters
+          msg:
+             - Please enter a valid Original Contract Value. Rows
+             -  currently have an invalid Original Value. The format to respect is "#############.##"
+
+  - datastore_id: amendment_value
+    label: Contract Amendment Value / Valeur de modification
+    datastore_type: money
+    mandatory:  Yes
+    business rules:
+       mandatory:
+         proposition:
+            rule: [length,'>', '0']
+       format:
+          antecedent:
+            - rule: [length, '>', '0']
+          consequent:
+              rule: [match, '(\d{1,13}|\d{1,13}[.]\d{1,2})']
+    format type: Floating point
+    validation:
+       - not empty: mandatory
+       - format: format
+    mask: (\d{1,13}|\d{1,13}[.]\d{1,2})
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+           - Please supply a valid Total Contract Value for rows
+           - . The Total Contract Value cannot be empty. The format to respect is "#############.##"
+       format:
+          type: Invalid characters
+          msg:
+             - Please enter a valid Amendment Value. Rows
+             -  currently have an invalid Original Value. The format to respect is "#############.##".
+
+
+  - datastore_id: comments_en
+    label: Comments English / Commentaires en anglais
+    datastore_type: text
+    mandatory: Yes for contracts over $10K. Not mandatory for contracts $10K and under.
+    business rules:
+       mandatory:
+          antecedent:
+             - field name: contract_value
+               rule: [value, '>', '10000']
+          consequent:
+              rule: [length,'>', '0']
+    format type: Free text
+    validation:
+       - not empty: mandatory
+    mask: N/A
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Comments English for rows
+             - . The Comments English field cannot be empty.
+
+  - datastore_id: comments_fr
+    label: Comments French / Commentaires en français
+    datastore_type: text
+    mandatory: Yes for contracts over $10K. Not mandatory for contracts $10K and under.
+    business rules:
+       mandatory:
+          antecedent:
+             - field name: contract_value
+               rule: [value, '>', '10000']
+          consequent:
+              rule: [length,'>', '0']
+    format type: Free text
+    validation:
+       - not empty: mandatory
+    mask: N/A
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Comments English for rows
+             - . The Comments English field cannot be empty.
+
+  - datastore_id: additional_comments_en
+    label: Additional Comments English / Commentaires additionnels en anglais
+    datastore_type: text
+    mandatory: No
+    business rules: N/A
+    format type: Free text
+    validation:
+    mask: N/A
+    validation errors:
+
+  - datastore_id: additional_comments_fr
+    label: Additional Comments French / Commentaires additionnels en français
+    datastore_type: text
+    mandatory: No
+    business rules: N/A
+    format type: Free text
+    validation:
+    mask: N/A
+    validation errors:
+
+  - datastore_id: agreement_type_code
+    label: Agreement Type / Type d'accord
+    datastore_type: text
+    mandatory: Must be completed for contracts covered by the government procurement chapters of trade agreements.
+    business rules:
+       choice:
+           proposition:
+               rule: [array, in, 'Y,Z,X,C,W,N,I,A,R']
+       action: Whenever one of the possible codes is provided below, the acronym of each trade agreement will be published in full. The full name of each acronym is as follow- WTO – World Trade Organization – Agreement on Government Procurement; NAFTA – North American Free Trade Agreement; AIT – Agreement on Internal Trade; ABSA (PSAB) – Aboriginal Business Set Aside (Procurement Strategy for Aboriginal Business); LCSA (CLCA) – Land Claim Set Aside (Comprehensive Land Claim Agreement
+    format type: Controlled list
+    validation:
+       - valid entry: choice
+    mask: One single character
+    validation errors:
+       valid entry:
+          type: Invalid entry
+          msg:
+             - Please supply a valid Agreement Type for row(s)
+             - . The field must contain one of the following letters Y, Z, X, C, W, N, I, A, R.
+
+
+  - datastore_id: commodity_type_code
+    label: Commodity Type / Type de produit
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+       mandatory:
+          proposition:
+              rule: [length, '>', '0']
+       choice:
+          antecedent:
+              - rule: [length, '>', '0']
+          consequent:
+              rule: [array, in, 'G,S,C']
+    format type: Controlled List
+    validation:
+       - not empty: mandatory
+       - valid entry: choice
+    mask: One single character
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+             - Please supply a valid Commodity Type for row(s)
+             - The Commodity Type field cannot be empty.
+        valid entry:
+           type: Invalid entry
+           msg:
+             - Please supply a valid Commodity Type for row(s)
+             - . The field must contain one of the following letters G, S or C.
+
+
+  - datastore_id: commodity_code
+    label: Commodity Code / Code de produit
+    datastore_type: text
+    choices_source: commodity_code.jsonl
+    mandatory: Yes
+    business rules:
+        mandatory:
+            proposition:
+              rule: [length, '>', '0']
+        choice:
+            antecedent:
+              - rule: [length, '>', '0']
+            consequent:
+              rule: [array, in, 'commodity_code.jsonl']
+        action: Whenever the code is supplied without a text descriptor, the system will automatically insert a text descriptor based on the UNSPSC list of codes.
+    format type: Free text
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: N/A
+    validation errors:
+        not empty:
+          type: Empty or NULL field
+          msg:
+            - Please supply a valid Commodity Code for row(s)
+            - The Commodity Code field cannot be empty.
+        valid entry:
+          type: Invalid entry
+          msg:
+            - Invalid Commodity Code for row(s)
+            - .
+
+  - datastore_id: country_of_origin
+    label: Country of Origin / Pays d'origine
+    datastore_type: text
+    choices_source: country_of_origin.jsonl
+    mandatory: Yes
+    business rules:
+      mandatory:
+          proposition:
+              rule: [length, '>', '0']
+      choice:
+          proposition:
+              rule: [array, in, 'country_of_origin.jsonl']
+      not CA:
+          antecedent:
+             - field name: aboriginal_business
+               rule: [array, in, 'True,T,Yes,Y']
+             - field name: commodity_type_code
+               rule: [array, in, 'S,C']
+          consequent:
+              rule: [string,'==','CA']
+
+      action: When publishing, the system will publish the full name of the country of origin using the International Organization for Standardization (ISO) Standard 3166-1-alphas-2, Codes for the representation of Names of Countries.
+    format type: Controlled List
+    validation:
+      - not empty: mandatory
+      - valid entry: choice
+      - not CA: not CA
+    mask: N/A
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Country of Origin code for row(s)
+             - . The Country of Origin field cannot be empty.
+       valid entry:
+          type: Invalid entry
+          msg:
+              - Please supply a valid Country of Origin code for row(s)
+              - .
+       not CA:
+          type: Not CA when PSAB Incidental Indicator is ‘True’ and Commodity Type is Services (S) or Construction (C)
+          msg:
+            - The Country of Origin code for row(s)
+            - must be CA when the Commodity Type is Services (S) or (Construction (C) for a Procurement Strategy for Aboriginal Business Incidental contract.
+
+
+  - datastore_id: solicitation_procedure_code
+    label: Solicitation Procedure / Méthode d'invitation à soumissionner
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+       mandatory:
+           proposition:
+              rule: [length, '>', '0']
+       choice:
+           proposition:
+              rule: [array, in, 'AC,OB,TC,TN']
+       action: When publishing, the system will publish the following text for each code provided AC ACAN – “This contract is a result of an advance contract award notice.”; OB Open Bidding – “This contract was competitively sourced electronically.”; TC Traditional Competitive – “This contract was competitively sourced using traditional bidding procedures (for example, by using a suppliers’ list).”; TN Traditional Non-Competitive – “This contract was sole-sourced.”.
+    format type: Controlled List
+    validation:
+       - not empty: mandatory
+       - valid entry: choice
+    mask: XX – Two characters
+    validation errors:
+       not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Solicitation Procedure code for row(s)
+             - . The Solicitation Procedure field cannot be empty.
+       valid entry:
+          type: Invalid entry
+          msg:
+            - Please supply a valid Solicitation Procedure code for row(s)
+            - . The field must contain one of the following options AC, OB, TC or TN.
+
+
+  - datastore_id: limited_tendering_reason_code
+    label: Limited Tendering Reason / Raisons justifiant le recours à l'appel d'offres limité
+    datastore_type: text
+    mandatory: No
+    business rules:
+       choice:
+           antecedent:
+             -  rule: [length, '>', '0']
+           consequent:
+              rule: [array,in,'05,20,21,22,71,72,74,81,23,24,25,86,90,87,85']
+       action: When publishing and only the code is provided, the system should automatically publish both the code and its text descriptor.
+    format type: Controlled List
+    validation:
+        - valid entry: choice
+    mask: ##
+    validation errors:
+        valid entry:
+           type: Invalid entry
+           msg:
+              - Please supply a valid Limited Tendering Reason code for row(s)
+              - . The field should contain one of the following options 05, 20, 21, 22, 71, 72, 74, 81, 23, 24, 25, 86, 90, 87, or 85.
+
+
+  - datastore_id: derogation_code
+    label: Derogation / Dérogation
+    datastore_type: text
+    mandatory: No
+    business rules:
+        choice:
+            antecedent:
+             -  rule: [length, '>', '0']
+            consequent:
+              rule: [array,in,'00,01,02,03,04,05,06,07,08,09']
+        action: When publishing and only the code is provided, the system should automatically publish both the code and its text descriptor.
+    format type: Controlled List
+    validation:
+        - valid entry: choice
+    mask: ##
+    validation errors:
+        valid entry:
+           type: Invalid entry
+           msg:
+             - Please supply a valid Derogation code for row(s)
+             - .
+
+  - datastore_id: aboriginal_business
+    label: Procurement Strategy for Aboriginal Business Incidental Indicator / Stratégie d'approvisionnement auprès des entreprises autochtones
+    datastore_type: boolean
+    mandatory: Yes
+    business rules:
+        mandatory:
+            proposition:
+                rule: [length, '>', '0']
+        choice:
+            proposition:
+                rule: [array, in, 'Yes,No,Y,N,True,False,T,F']
+    format type: Boolean
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: [True, False]
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+              - Please supply a valid Procurement Strategy for Aboriginal Business Incidental Indicator value for row(s)
+              - . The Procurement Strategy for Aboriginal Business Incidental Indicator field cannot be empty.
+        valid entry:
+           type: Invalid entry
+           msg:
+              - Please supply a valid Procurement Strategy for Aboriginal Business Incidental Indicator value for row(s)
+              - . The Procurement Strategy for Aboriginal Business Incidental Indicator field must contain one of the following options True or False.
+
+
+  - datastore_id: intellectual_property_code
+    label: Intellectual Property Indicator / Indicateur de propriété intellectuelle
+    datastore_type: text
+    mandatory: Conditional Yes
+    business rules:
+        mandatory:
+           antecedent:
+               - field name: original_value
+                 rule: [value, '>', '25000']
+           consequent:
+                 rule: [length, '>','0']
+        choice:
+           antecedent:
+              - rule: [length, '>', '0']
+           consequent:
+               rule: [array, in, 'A1,A2,A3,A41,A42,A43,A5,A8,B,C,N/A, ,Not Applicable']
+        action: When publishing, if the code is provided without the text descriptor by the department, then the system will automatically publish the code and its associated text descriptor.
+    format type: Controlled List
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: N/A
+    validation errors:
+       not empty:
+           type: Empty or NULL field
+           msg:
+             - Please supply a valid Intellectual Property Indicator for row(s)
+             - . Intellectual Property Indicator field cannot be empty for contracts with original value over $25K.
+       valid entry:
+           type: Invalid entry
+           msg:
+             - Please supply a valid Intellectual Property Indicator for row(s)
+             - .
+
+  - datastore_id: potential_commercial_exploitation
+    label: Potential for Commercial Exploitation / Potentiel d'exploitation commerciale
+    datastore_type: boolean
+    mandatory: Conditional yes
+    business rules:
+        mandatory:
+            antecedent:
+                - field name: intellectual_property_code
+                  rule: [array, in, 'A1,A2,A3,A41,A42,A43,A65,A8,B']
+            consequent:
+                rule: [length, '>','0']
+        choice:
+            antecedent:
+                - rule: [length, '>','0']
+            consequent:
+                rule: [array, in, 'Yes,No,Y,N,True,False,T,F']
+    format type: Boolean
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: True or False
+    validation errors:
+        not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Potential for Commercial Exploitation for row(s)
+             - . Potential for Commercial Exploitation field should not be empty if the Intellectual Property data field records is one of the following values (A1, A2, A3, A41, A42, A43, A65, A8 or B).
+        valid entry:
+          type: Invalid entry
+          msg:
+            - Please supply a valid Potential for Commercial Exploitation value for row(s)
+            - . The Potential for Commercial Exploitation field must contain one of the following options True or False.
+
+
+  - datastore_id: former_public_servant
+    label: Former Public Servant in receipt of a PSSA pension / Ancien fonctionnaire recevant une pension en vertu de la LPFP
+    datastore_type: boolean
+    mandatory: Conditional Yes for contracts over $10K. Not mandatory for contracts $10K and under.
+    business rules:
+        mandatory:
+            antecedent:
+                - field name: commodity_type_code
+                  rule: [array, in, 'S,C']
+                - field name: contract_value
+                  rule: [value, '>', '10000']
+            consequent:
+                  rule: [length, '>', '0']
+        choice:
+            antecedent:
+                 - rule: [length,'>','0']
+            consequent:
+                 rule: [array, in, 'Yes,No,Y,N,True,False,T,F']
+    format type: Boolean
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: True or False
+    validation errors:
+        not empty:
+          type: Empty or NULL field
+          msg:
+             - Please supply a valid Former Public Servant in receipt of a PSSA pension for row(s)
+             - . Former Public Servant in receipt of a PSSA pension field should not be empty for service and construction services contracts over $10K.
+        valid entry:
+           type: Invalid entry
+           msg:
+             - Please supply a valid ‘Former Public Servant in receipt of a pension’ value for row(s)
+             - . The ‘Former Public Servant in receipt of a pension’ field must contain one of the following options True or False; Yes or No; T or F; or, Y or N.
+
+
+  - datastore_id: standing_offer
+    label: Call-up or Contract against a Standing Offer or Supply Arrangement Agreement / Commande subséquente à une l'offre à commandes ou arrangements en matière d'approvisionnement
+    datastore_type: boolean
+    mandatory: No.
+    business rules:
+        choice:
+          antecedent:
+              - rule: [length, '>', '0']
+          consequent:
+              rule: [array, in, 'PWSOSA,SSCSOSA']
+        action: When publishing, the system will publish the following text for each code provided PWSOSA – “This procurement is a call-up or a contract against a standing offer or supply arrangement agreement established by Public Works and Government Services Canada.”; and, SSCSOSA – “This procurement is a call-up or a contract against a standing offer or supply arrangement agreement established by Shared Services Canada.“
+    format Type: Controlled List
+    validation:
+       - valid entry: choice
+    mask: N/A
+    validation errors:
+       valid entry:
+          type: Invalid entry
+          msg:
+           - Please supply a valid Call-up or Contract Against a Standing Offer or Supply Arrangement Agreement code for row(s)
+           - .
+
+  - datastore_id: standing_offer_number
+    label: Standing Offer or Supply Arrangement Number / Numéro de l’offre à commandes
+    datastore_type: text
+    mandatory: Conditional yes for call-ups and contracts associated with a standing offer or supply arrangement agreement.
+    business rules:
+        mandatory:
+           antecedent:
+              - field name: standing_offer
+                rule: [length, '>', '0']
+           consequent:
+              rule: [length, '>', '0']
+        empty:
+           antecedent:
+              - field name: standing_offer
+                rule: [length, '==', '0']
+           consequent:
+              rule: [length, '==', '0']
+    format type: Free text
+    validation:
+        - not empty: mandatory
+        - empty: empty
+    mask: N/A
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+             - Please supply a Standing Offer or Supply Arrangement Number for row(s)
+             - . Standing Offer or Supply Arrangement Number field should not be empty if there is standing offer or supply arrangement associated with this contract.
+        empty:
+           type: Not Empty field
+           msg:
+             - Please clear Standing Offer or Supply Arrangement Number filed for row(s)
+             - . Standing Offer or Supply Arrangement Number field should not be left blank if there is no standing offer or supply arrangement associated with this contract.
+
+
+  - datastore_id: document_type_code
+    label: Document Type / Type de document
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+        mandatory:
+           proposition:
+              rule: [length, '>', '0']
+        choice:
+           proposition:
+              rule: [array, in, 'C,A,SOSA']
+        action: When publishing, the system will publish the following text for each code provided C – “Contract”; A – “Amendment(s)”; SOSA – “Standing Offer/Supply Arrangement Agreement”.
+    format type: Controlled List
+    validation:
+        - not empty: mandatory
+        - valid entry: choice
+    mask: N/A
+    validation errors:
+        not empty:
+           type: Empty or NULL field
+           msg:
+              - Please supply a valid Document Type code for row(s)
+              - .
+        valid entry:
+           type: Invalid entry
+           msg:
+              - Please supply a valid Document Type code for row(s)
+              - .
+
+  - datastore_id: reporting_period
+    label: Reporting Period / Période de déclaration
+    datastore_type: text
+    mandatory: Yes
+    business rules:
+       mandatory:
+          antecedent:
+             - field name: contract_value
+               rule: [value, '>', '10000']
+          consequent:
+             rule: [length, '>', '0']
+       empty:
+          antecedent:
+             - field name: contract_value
+               rule: [value, '<=', '10000']
+          consequent:
+             rule: [length, '==', '0']
+       format:
+          antecedent:
+            - rule: [length, '>', '0']
+          consequent:
+             rule: [period, match, '%Y-%Y-Q[1234]']
+    format type: Free text
+    validation:
+       - not empty: mandatory
+       - empty: empty
+       - format: format
+    mask: N/A
+    validation errors:
+       not empty:
+           type: Empty or NULL field
+           msg:
+             - Please supply a valid Reporting Period for row(s)
+             - .
+       empty:
+           type: Non-Empty field
+           msg:
+             - Please not supply a valid Reporting Period for row(s)
+             - .
+       format:
+           type: Invalid format
+           msg:
+             - Please supply a valid Reporting Period for row(s)
+             - .
+

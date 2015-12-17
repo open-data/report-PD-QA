@@ -1,0 +1,17 @@
+#ignore the environment file
+env.json
+
+#ignore directory 'data'
+data/**
+
+#ignore directory 'external_report'
+external_report/**
+
+#ignore directory 'internal_report'
+internal_report/**
+
+#ignore 'report'
+report/**
+
+
+
