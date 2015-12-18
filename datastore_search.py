@@ -1,15 +1,12 @@
-import requests
-
-import json
 from package_search import PackageSearch
-from report import Report
+from report_internal_error import InternalErrorReporter
 
 class DataStoreSearch(PackageSearch):
 
     def __init__(self, base_url, search_url):
         super(DataStoreSearch,self).__init__(base_url, search_url)
 
-    def tables_in_resources(self, resources, api_key, reporter, package):
+    def tables_in_resources(self, resources, api_key, package):
 
         tables={}
 
@@ -27,14 +24,15 @@ class DataStoreSearch(PackageSearch):
             if result['success'] == 'true' or result['success'] == True:
                 tables[resource]=dict([('HTTP_status', 'success'),
                                     ('HTTP_message', 'request success'),
-                                    ('resource_retrieval', 'success'),
+                                    ('resource_status', 'success'),
                                     ('records', result['result']['records'])])
             else:
-                reporter.report_error('Retrieving the resources of package ' + package + ' fails with message as '
+                InternalErrorReporter.report_error('Retrieving the resources of package ' + package + ' fails with message as '
                                           + result['error']['message'])
                 tables[resource]=dict([('HTTP_status', 'success'),
                                     ('HTTP_message', 'request success'),
-                                    ('resource_retrieval', 'fail')
+                                    ('resource_status', 'fail'),
+                                    ('resource_message', result['error']['message'])
                                     ])
 
         return tables

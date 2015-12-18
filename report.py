@@ -2,6 +2,7 @@ import time
 import os
 
 from report_with_type import ReportWithType
+from report_internal_error import InternalErrorReporter
 
 class Report(object):
 
@@ -13,7 +14,7 @@ class Report(object):
         self.log_dir = self.internal_dir+'/log'
         os.makedirs(self.log_dir)
         os.makedirs(self.external_dir)
-        self.error_fs = open(self.internal_dir+'/' + 'error.txt','w')
+        InternalErrorReporter.setup(self.internal_dir)
 
     def get_log_dir(self):
         return self.log_dir
@@ -28,7 +29,7 @@ class Report(object):
         self.report_with_type.write_package_json({id:value})
         title= value['organization']['title'].partition('|')[0]
         if value['organization']['id'] in self.organizations:
-            self.report_error('organization ' + title +' as ' + value['organization']['id']
+            InternalErrorReporter.report_error('organization ' + title +' as ' + value['organization']['id']
                               + ' in the package' + id + ' exists already' )
         else:
             self.organizations[value['organization']['id']]= dict([('organization', value['organization']['title']),
@@ -50,8 +51,5 @@ class Report(object):
             self.report_package(id=key,value=value,type=type, schema=schema)
         self.stop_report_for_type()
 
-    def report_error(self, message):
-        self.error_fs.write(message +'\n')
-
-    def error_file_close(self):
-        self.error_fs.close()
+    def stop_report(self):
+        InternalErrorReporter.close_error_file()

@@ -1,14 +1,17 @@
 import requests
 import json
-from report import Report
+import time
+from report_internal_error import InternalErrorReporter
 
 class PackageSearch(object):
 
     def __init__(self, base_url, search_url):
         self.search_url = base_url+search_url
 
-
     def get_request(self, url, params, api_key=None):
+
+        time.sleep(10)
+
         if (api_key is None):
             r=requests.get(url, params=params)
         else:
@@ -39,7 +42,7 @@ class PackageSearch(object):
             print received['result']
             return received['result']['count']
 
-    def packages_with_type(self, reporter, rows = 30, start = 1, type = 'contracts'):
+    def packages_with_type(self, rows = 30, start = 1, type = 'contracts'):
 
         packages={}
 
@@ -70,7 +73,7 @@ class PackageSearch(object):
                 packages[result['id']]= package
         else:
             #write a line in the error file
-            reporter.report_error('Retrieving ' + str(rows) + ' packages starting from ' + str(start)
+            InternalErrorReporter.report_error('Retrieving ' + str(rows) + ' packages starting from ' + str(start)
                                   + ' fails with message as ' + received['error']['message'])
 
         print json.dumps(packages)
@@ -78,7 +81,7 @@ class PackageSearch(object):
         num_of_retrieved = len(packages.keys())
 
         if num_of_retrieved < rows:
-            reporter.report_error('Retrieved ' + str(num_of_retrieved) + ' packages from ' + str(start)
+            InternalErrorReporter.report_error('Retrieved ' + str(num_of_retrieved) + ' packages from ' + str(start)
                                   + '. The number is less than that defined as ' + str(rows))
 
         return packages

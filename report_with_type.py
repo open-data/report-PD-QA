@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+from report_internal_error import InternalErrorReporter
 
 class ReportWithType(object):
 
@@ -37,7 +38,9 @@ class ReportWithType(object):
         for table_k, table_v in tables.iteritems():
 
             if (table_v['HTTP_status'] != 'success'):
-                print("http_error " + title + ' with package id as ' + package_id)
+                InternalErrorReporter.report_error("http_error " + title + ' with package id as ' + package_id
+                      + 'the message is ' + table_v['HTTP_status']['HTTP_message']
+                      + 'with resource id as ' + table_k)
                 continue
 
             result = table_v['result']
@@ -83,7 +86,6 @@ class ReportWithType(object):
                     column_index = 0
 
                     for column in schema:
-
                         column_key = column['datastore_id']
 
                         if column_key not in record:
@@ -98,23 +100,15 @@ class ReportWithType(object):
                             department_row.append(column['validation errors'][case]['type'])
                         else:
                             department_row.append(record[column_key]['status'])
-
                         column_index += 1
-
                     department_csv_writer.writerow(department_row)
-
                     row_index += 1
-
                 department_csv_fs.close()
-
                 self.write_error(department_error_fs, department_error,schema, general_row)
-
                 department_error_fs.close()
-
             self.write_general_csv(general_row)
 
     def write_error(self, department_error_fs, department_error, schema, general_row):
-
         for column in schema:
             column_key = column['datastore_id']
             if department_error[column_key]:
@@ -126,7 +120,6 @@ class ReportWithType(object):
                    general_line = column['label'].encode('utf-8') + ' has ' + str(len(error_rows)) + ' records with ' + msg['type'].encode('utf-8')
                    general_row.append(general_line)
 
-
     def report_organizations(self, organizations):
         try:
             with open(self.internal_dir + '/organization.json', 'w') as org_fs:
@@ -134,5 +127,6 @@ class ReportWithType(object):
         except IOError:
             raise
 
-
+    def get_internal_dir(self):
+        return self.internal_dir
 
