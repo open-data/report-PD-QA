@@ -52,7 +52,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['ref_number']=''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['ref_number']['status'], 'failed')
+        self.assertEqual(result['ref_number']['status'], 'fail')
         self.assertEqual(result['ref_number']['case'], 'not empty')
 
 
@@ -63,7 +63,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['vendor_name'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['vendor_name']['status'], 'failed')
+        self.assertEqual(result['vendor_name']['status'], 'fail')
         self.assertEqual(result['vendor_name']['case'],'not empty')
 
 
@@ -75,12 +75,12 @@ class ValidationTests(unittest.TestCase):
 
         self.record['contract_date'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_date']['status'], 'failed')
+        self.assertEqual(result['contract_date']['status'], 'fail')
         self.assertEqual(result['contract_date']['case'],'not empty')
 
         self.record['contract_date'] = '3425667'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_date']['status'], 'failed')
+        self.assertEqual(result['contract_date']['status'], 'fail')
         self.assertEqual(result['contract_date']['case'],'format')
 
     def test_description_en(self):
@@ -91,7 +91,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['description_en'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['description_en']['status'], 'failed')
+        self.assertEqual(result['description_en']['status'], 'fail')
         self.assertEqual(result['description_en']['case'],'not empty')
 
         self.record['contract_value'] = '3000'
@@ -111,7 +111,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['description_fr'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['description_fr']['status'], 'failed')
+        self.assertEqual(result['description_fr']['status'], 'fail')
         self.assertEqual(result['description_fr']['case'],'not empty')
 
         self.record['description_fr'] = 'erttttt'
@@ -133,7 +133,7 @@ class ValidationTests(unittest.TestCase):
 
         #empty case
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_period_start']['status'], 'failed')
+        self.assertEqual(result['contract_period_start']['status'], 'fail')
         self.assertEqual(result['contract_period_start']['case'],'empty')
 
         self.record['contract_period_start'] =''
@@ -148,12 +148,12 @@ class ValidationTests(unittest.TestCase):
 
         self.record['contract_period_start']=''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_period_start']['status'], 'failed')
+        self.assertEqual(result['contract_period_start']['status'], 'fail')
         self.assertEqual(result['contract_period_start']['case'],'not empty')
 
         self.record['contract_period_start'] = '12345'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_period_start']['status'], 'failed')
+        self.assertEqual(result['contract_period_start']['status'], 'fail')
         self.assertEqual(result['contract_period_start']['case'],'format')
 
         self.record['contract_value'] = '3000'
@@ -178,17 +178,17 @@ class ValidationTests(unittest.TestCase):
 
         self.record['delivery_date'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['delivery_date']['status'], 'failed')
+        self.assertEqual(result['delivery_date']['status'], 'fail')
         self.assertEqual(result['delivery_date']['case'],'not empty')
 
         self.record['delivery_date'] = '123456'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['delivery_date']['status'], 'failed')
+        self.assertEqual(result['delivery_date']['status'], 'fail')
         self.assertEqual(result['delivery_date']['case'],'format')
 
         self.record['contract_value'] = '3000'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['delivery_date']['status'], 'failed')
+        self.assertEqual(result['delivery_date']['status'], 'fail')
         self.assertEqual(result['delivery_date']['case'],'format')
 
         self.record['contract_value'] = '3000'
@@ -204,18 +204,18 @@ class ValidationTests(unittest.TestCase):
 
         self.record['contract_value']=''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_value']['status'], 'failed')
+        self.assertEqual(result['contract_value']['status'], 'fail')
         self.assertEqual(result['contract_value']['case'],'not empty')
 
         self.record['contract_value']='afdg'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_value']['status'], 'failed')
+        self.assertEqual(result['contract_value']['status'], 'fail')
         self.assertEqual(result['contract_value']['case'],'format')
 
     def test_original_value(self):
 
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['original_value']['status'], 'failed')
+        self.assertEqual(result['original_value']['status'], 'fail')
 
         self.record['original_value']='1234'
         result = self.data_validator.validate(self.record)
@@ -223,13 +223,13 @@ class ValidationTests(unittest.TestCase):
 
         self.record['original_value']='a1234'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['original_value']['status'], 'failed')
+        self.assertEqual(result['original_value']['status'], 'fail')
         self.assertEqual(result['original_value']['case'],'format')
 
     def test_amendment_value(self):
 
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['amendment_value']['status'], 'failed')
+        self.assertEqual(result['amendment_value']['status'], 'fail')
         self.assertEqual(result['amendment_value']['case'],'not empty')
 
 
@@ -239,7 +239,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['contract_value']='afdg'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['contract_value']['status'], 'failed')
+        self.assertEqual(result['contract_value']['status'], 'fail')
         self.assertEqual(result['contract_value']['case'],'format')
 
 
@@ -251,7 +251,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['comments_en'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['comments_en']['status'], 'failed')
+        self.assertEqual(result['comments_en']['status'], 'fail')
         self.assertEqual(result['comments_en']['case'],'not empty')
 
         self.record['contract_value'] = '3000'
@@ -271,7 +271,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['comments_fr'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['comments_fr']['status'], 'failed')
+        self.assertEqual(result['comments_fr']['status'], 'fail')
         self.assertEqual(result['comments_fr']['case'],'not empty')
 
         self.record['comments_fr'] = 'erttttt'
@@ -308,12 +308,12 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['agreement_type_code']['status'], 'failed')
+        self.assertEqual(result['agreement_type_code']['status'], 'fail')
         self.assertEqual(result['agreement_type_code']['case'],'valid entry')
 
         self.record['agreement_type_code'] = 'w'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['agreement_type_code']['status'], 'failed')
+        self.assertEqual(result['agreement_type_code']['status'], 'fail')
         self.assertEqual(result['agreement_type_code']['case'],'valid entry')
 
         self.record['agreement_type_code'] = 'W'
@@ -325,12 +325,12 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['commodity_type_code']['status'], 'failed')
+        self.assertEqual(result['commodity_type_code']['status'], 'fail')
         self.assertEqual(result['commodity_type_code']['case'],'not empty')
 
         self.record['commodity_type_code'] = 'T'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['commodity_type_code']['status'], 'failed')
+        self.assertEqual(result['commodity_type_code']['status'], 'fail')
         self.assertEqual(result['commodity_type_code']['case'],'valid entry')
 
         self.record['commodity_type_code'] = 'S'
@@ -342,12 +342,12 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['commodity_code']['status'], 'failed')
+        self.assertEqual(result['commodity_code']['status'], 'fail')
         self.assertEqual(result['commodity_code']['case'],'not empty')
 
         self.record['commodity_code'] = 'T'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['commodity_code']['status'], 'failed')
+        self.assertEqual(result['commodity_code']['status'], 'fail')
         self.assertEqual(result['commodity_code']['case'],'valid entry')
 
         self.record['commodity_code'] = 'JX3610AA'
@@ -359,12 +359,12 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['country_of_origin']['status'], 'failed')
+        self.assertEqual(result['country_of_origin']['status'], 'fail')
         self.assertEqual(result['country_of_origin']['case'], 'not empty')
 
         self.record['country_of_origin'] = 'T'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['country_of_origin']['status'], 'failed')
+        self.assertEqual(result['country_of_origin']['status'], 'fail')
         self.assertEqual(result['country_of_origin']['case'], 'valid entry')
 
         self.record['country_of_origin'] = 'AS'
@@ -379,7 +379,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['country_of_origin'] = 'AS'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['country_of_origin']['status'], 'failed')
+        self.assertEqual(result['country_of_origin']['status'], 'fail')
         self.assertEqual(result['country_of_origin']['case'],'not CA')
 
 
@@ -387,17 +387,17 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['solicitation_procedure_code']['status'], 'failed')
+        self.assertEqual(result['solicitation_procedure_code']['status'], 'fail')
         self.assertEqual(result['solicitation_procedure_code']['case'], 'not empty')
 
         self.record['solicitation_procedure_code'] = 'T'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['solicitation_procedure_code']['status'], 'failed')
+        self.assertEqual(result['solicitation_procedure_code']['status'], 'fail')
         self.assertEqual(result['solicitation_procedure_code']['case'], 'valid entry')
 
         self.record['solicitation_procedure_code'] = 'ac'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['solicitation_procedure_code']['status'], 'failed')
+        self.assertEqual(result['solicitation_procedure_code']['status'], 'fail')
         self.assertEqual(result['solicitation_procedure_code']['case'], 'valid entry')
 
         self.record['solicitation_procedure_code'] = 'AC'
@@ -413,7 +413,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['limited_tendering_reason_code'] = '10'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['limited_tendering_reason_code']['status'], 'failed')
+        self.assertEqual(result['limited_tendering_reason_code']['status'], 'fail')
         self.assertEqual(result['limited_tendering_reason_code']['case'], 'valid entry')
 
         self.record['limited_tendering_reason_code'] = '21'
@@ -434,7 +434,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['derogation_code'] = '21'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['derogation_code']['status'], 'failed')
+        self.assertEqual(result['derogation_code']['status'], 'fail')
         self.assertEqual(result['derogation_code']['case'], 'valid entry')
 
 
@@ -442,7 +442,7 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['aboriginal_business']['status'], 'failed')
+        self.assertEqual(result['aboriginal_business']['status'], 'fail')
         self.assertEqual(result['aboriginal_business']['case'], 'not empty')
 
         self.record['aboriginal_business'] = 'True'
@@ -451,7 +451,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['aboriginal_business'] = 'Ta'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['aboriginal_business']['status'], 'failed')
+        self.assertEqual(result['aboriginal_business']['status'], 'fail')
         self.assertEqual(result['aboriginal_business']['case'], 'valid entry')
 
     def test_intellectual_property_code(self):
@@ -463,12 +463,12 @@ class ValidationTests(unittest.TestCase):
         self.record['intellectual_property_code'] = ''
         self.record['original_value'] = '26000'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['intellectual_property_code']['status'], 'failed')
+        self.assertEqual(result['intellectual_property_code']['status'], 'fail')
         self.assertEqual(result['intellectual_property_code']['case'], 'not empty')
 
         self.record['intellectual_property_code'] = 'Ta'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['intellectual_property_code']['status'], 'failed')
+        self.assertEqual(result['intellectual_property_code']['status'], 'fail')
         self.assertEqual(result['intellectual_property_code']['case'], 'valid entry')
 
         self.record['intellectual_property_code'] = 'B'
@@ -494,12 +494,12 @@ class ValidationTests(unittest.TestCase):
 
         self.record['potential_commercial_exploitation'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['potential_commercial_exploitation']['status'], 'failed')
+        self.assertEqual(result['potential_commercial_exploitation']['status'], 'fail')
         self.assertEqual(result['potential_commercial_exploitation']['case'], 'not empty')
 
         self.record['potential_commercial_exploitation'] = 'A'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['potential_commercial_exploitation']['status'], 'failed')
+        self.assertEqual(result['potential_commercial_exploitation']['status'], 'fail')
         self.assertEqual(result['potential_commercial_exploitation']['case'], 'valid entry')
 
     def test_former_public_servant(self):
@@ -516,7 +516,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['former_public_servant'] =''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['former_public_servant']['status'], 'failed')
+        self.assertEqual(result['former_public_servant']['status'], 'fail')
         self.assertEqual(result['former_public_servant']['case'], 'not empty')
 
 
@@ -534,7 +534,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['former_public_servant'] =''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['former_public_servant']['status'], 'failed')
+        self.assertEqual(result['former_public_servant']['status'], 'fail')
         self.assertEqual(result['former_public_servant']['case'], 'not empty')
 
     def test_standing_offer(self):
@@ -549,7 +549,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['standing_offer'] ='ddg'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['standing_offer']['status'], 'failed')
+        self.assertEqual(result['standing_offer']['status'], 'fail')
         self.assertEqual(result['standing_offer']['case'], 'valid entry')
 
     def test_standing_offer_number(self):
@@ -560,13 +560,13 @@ class ValidationTests(unittest.TestCase):
 
         self.record['standing_offer'] = 'PWSOSA'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['standing_offer_number']['status'], 'failed')
+        self.assertEqual(result['standing_offer_number']['status'], 'fail')
         self.assertEqual(result['standing_offer_number']['case'], 'not empty')
 
         self.record['standing_offer_number'] = '1223'
         self.record['standing_offer'] = ''
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['standing_offer_number']['status'], 'failed')
+        self.assertEqual(result['standing_offer_number']['status'], 'fail')
         self.assertEqual(result['standing_offer_number']['case'], 'empty')
 
 
@@ -584,12 +584,12 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['document_type_code']['status'], 'failed')
+        self.assertEqual(result['document_type_code']['status'], 'fail')
         self.assertEqual(result['document_type_code']['case'], 'not empty')
 
         self.record['document_type_code'] = 'c'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['document_type_code']['status'], 'failed')
+        self.assertEqual(result['document_type_code']['status'], 'fail')
         self.assertEqual(result['document_type_code']['case'], 'valid entry')
 
         self.record['document_type_code'] = 'C'
@@ -601,7 +601,7 @@ class ValidationTests(unittest.TestCase):
 
         #mandatory
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['reporting_period']['status'], 'failed')
+        self.assertEqual(result['reporting_period']['status'], 'fail')
         self.assertEqual(result['reporting_period']['case'], 'not empty')
 
         self.record['contract_value'] = '3000'
@@ -610,7 +610,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['reporting_period'] = '2015-2016-Q1'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['reporting_period']['status'], 'failed')
+        self.assertEqual(result['reporting_period']['status'], 'fail')
         self.assertEqual(result['reporting_period']['case'], 'empty')
 
         self.record['contract_value'] = '15000'
@@ -620,7 +620,7 @@ class ValidationTests(unittest.TestCase):
 
         self.record['reporting_period'] = 'abcdef'
         result = self.data_validator.validate(self.record)
-        self.assertEqual(result['reporting_period']['status'], 'failed')
+        self.assertEqual(result['reporting_period']['status'], 'fail')
         self.assertEqual(result['reporting_period']['case'], 'format')
 
 

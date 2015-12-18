@@ -1,6 +1,6 @@
 import requests
-
 import json
+from report import Report
 
 class PackageSearch(object):
 
@@ -39,7 +39,7 @@ class PackageSearch(object):
             print received['result']
             return received['result']['count']
 
-    def packages_with_type(self, rows = 30, start = 1, type = 'contracts'):
+    def packages_with_type(self, reporter, rows = 30, start = 1, type = 'contracts'):
 
         packages={}
 
@@ -50,7 +50,7 @@ class PackageSearch(object):
         except Exception:
             raise
 
-        if (received['success']):
+        if (received['success']=='true' or received['success']==True):
             for result in received['result']['results']:
                 organization = dict([
                         ('id',result['organization']['id'].encode('utf-8')),
@@ -68,8 +68,18 @@ class PackageSearch(object):
                 ])
 
                 packages[result['id']]= package
+        else:
+            #write a line in the error file
+            reporter.report_error('Retrieving ' + str(rows) + ' packages starting from ' + str(start)
+                                  + ' fails with message as ' + received['error']['message'])
 
         print json.dumps(packages)
+
+        num_of_retrieved = len(packages.keys())
+
+        if num_of_retrieved <= rows:
+            reporter.report_error('Retrieved ' + str(num_of_retrieved) + ' packages from ' + str(start)
+                                  + '. The number is less than that defined as ' + str(rows))
 
         return packages
 

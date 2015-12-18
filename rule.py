@@ -30,7 +30,6 @@ class Rule(object):
         #uni-operation
 
         if self.operation == 'length':
-
             return eval('len(field_value)' + self.operator + self.operand)
 
         if self.operation == 'date':
@@ -52,14 +51,9 @@ class Rule(object):
             return eval('field_value ' + self.operator + '\'' + self.operand + '\'')
 
         if self.operation == 'value':
-
-            print self.field_name + str(field_value)
-
             value = 0
-
             if field_value:
                 value = float(field_value)
-
             return eval('value ' + self.operator + self.operand)
 
         if self.operation == 'array':
