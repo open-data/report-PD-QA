@@ -77,7 +77,7 @@ class PackageSearch(object):
 
         num_of_retrieved = len(packages.keys())
 
-        if num_of_retrieved <= rows:
+        if num_of_retrieved < rows:
             reporter.report_error('Retrieved ' + str(num_of_retrieved) + ' packages from ' + str(start)
                                   + '. The number is less than that defined as ' + str(rows))
 

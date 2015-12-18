@@ -90,7 +90,7 @@ class ReportWithType(object):
                             print('the column '+ column_key + ' is not exist in record')
                             continue
 
-                        if record[column_key]['status']== 'failed':
+                        if record[column_key]['status']== 'fail':
                             case = record[column_key]['case']
                             if case not in department_error[column_key]:
                                 department_error[column_key][case] = []
@@ -122,10 +122,17 @@ class ReportWithType(object):
                    msg = column['validation errors'][error_key]
                    row = json.dumps(error_rows)
                    error_msg = msg['msg'][0].encode('utf-8') + row + msg['msg'][1].encode('utf-8')
-                   print "column key for the error " + column_key
                    department_error_fs.write(error_msg+'\n\n')
                    general_line = column['label'].encode('utf-8') + ' has ' + str(len(error_rows)) + ' records with ' + msg['type'].encode('utf-8')
                    general_row.append(general_line)
+
+
+    def report_organizations(self, organizations):
+        try:
+            with open(self.internal_dir + '/organization.json', 'w') as org_fs:
+                json.dump(organizations,org_fs)
+        except IOError:
+            raise
 
 
 

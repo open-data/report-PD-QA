@@ -20,7 +20,7 @@ class Report(object):
 
     def init_report_for_type(self,type):
         self.report_with_type = ReportWithType(self.internal_dir, self.external_dir, type)
-        self.organizations = []
+        self.organizations = {}
         general_row = ['organization title','number of records','errors']
         self.report_with_type.write_general_csv(general_row)
 
@@ -28,14 +28,19 @@ class Report(object):
         self.report_with_type.write_package_json({id:value})
         title= value['organization']['title'].partition('|')[0]
         if value['organization']['id'] in self.organizations:
-            print "organization exists already" + title +' ' + value['organization']['id']
-            return
-        self.organizations.append(value['organization']['id'])
+            self.report_error('organization ' + title +' as ' + value['organization']['id']
+                              + ' in the package' + id + ' exists already' )
+        else:
+            self.organizations[value['organization']['id']]= dict([('organization', value['organization']['title']),
+                                                                   ('packages',[])])
+        #organization_id: package_id
+        self.organizations[value['organization']['id']]['packages'].append(id)
         #write a line in csv first
         self.report_with_type.report_tables(id, tables = value['results'], schema = schema, title = title)
         return
 
     def stop_report_for_type(self):
+        self.report_with_type.report_organizations(self.organizations)
         self.report_with_type.close_general_csv()
         self.report_with_type.close_package_file()
 
