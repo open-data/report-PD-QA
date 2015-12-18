@@ -19,7 +19,10 @@ def perform_validation(tables, data_validator):
     for key, entry in tables.iteritems():
 
         if (entry['HTTP_status'] == 'error'):
-            break
+            continue
+
+        if (entry['resource_status'] == 'fail'):
+            continue
 
         records_detail=[]
 
@@ -116,19 +119,23 @@ def main():
         data_validator = Data_Validator(type)
         start = 1
 
+        #for the testing purpose
+        #num_of_retrieval =1
+
         reporter.init_report_for_type(type)
 
         for iteration in range(0,num_of_retrieval):
 
+            print 'start id: ' + str(start)
+
             try:
                 packages = package_search.packages_with_type(type = type,rows= 30, start = start)
             except Exception:
-                print (Exception.message)
-                continue
+                raise
             # validate each dataset
             for key,value in packages.iteritems():
 
-                tables = datastore_search.tables_in_resources(value['resources'],env['api_key'])
+                tables = datastore_search.tables_in_resources(resources=value['resources'],api_key=env['api_key'],package=key)
 
                 perform_validation(tables, data_validator)
 

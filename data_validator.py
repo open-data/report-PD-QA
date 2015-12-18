@@ -1,6 +1,3 @@
-import yaml
-import json
-import time
 from rule import Rule
 from schema import Schema
 
@@ -39,7 +36,7 @@ class Data_Validator(object):
         result = {'status' : 'pass'}
 
         if column_key not in record:
-            result = { 'status': 'failed',
+            result = { 'status': 'fail',
                         'error':{
                                 'not exist':{
                                  'type': 'Field does not exist',
@@ -61,7 +58,7 @@ class Data_Validator(object):
             if 'proposition' in field_rule:
                 if self.proposition_validation(rule_definition=field_rule['proposition'],
                                                record=record, column=column, results=results) != True :
-                    result['status'] = 'failed'
+                    result['status'] = 'fail'
 
             if 'antecedent' in field_rule:
                 antecedent_valid = True
@@ -74,13 +71,13 @@ class Data_Validator(object):
                 if antecedent_valid == True:
                     if self.proposition_validation(rule_definition=field_rule['consequent'],
                                                    record=record, results=results, column=column) != True :
-                        result['status'] = 'failed'
+                        result['status'] = 'fail'
 
                 if antecedent_valid == 'unknown':
                     result['status'] = 'unknown'
                     break
 
-            if result['status'] == 'failed':
+            if result['status'] == 'fail':
                 result['case'] = case_key
                 break
 
@@ -101,8 +98,6 @@ class Data_Validator(object):
 
 
     def proposition_validation(self, rule_definition, column, record, results):
-
-        print 'rule: ' + json.dumps(rule_definition)
 
         column_key = column['datastore_id']
 
