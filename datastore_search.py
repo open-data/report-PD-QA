@@ -1,10 +1,10 @@
 from package_search import PackageSearch
 from report_internal_error import InternalErrorReporter
 
-class DataStoreSearch(PackageSearch):
+class DatastoreSearch(PackageSearch):
 
     def __init__(self, base_url, search_url):
-        super(DataStoreSearch,self).__init__(base_url, search_url)
+        super(DatastoreSearch, self).__init__(base_url, search_url)
 
     def tables_in_resources(self, resources, api_key, package):
 

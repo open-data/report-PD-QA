@@ -3,9 +3,9 @@ import json
 import logging
 from report import Report
 from schema import Schema
-from data_validator import Data_Validator
+from data_validator import DataValidator
 from package_search import PackageSearch
-from datastore_search import DataStoreSearch
+from datastore_search import DatastoreSearch
 
 REPORT_DIR ='report'
 ENV_FILE = 'env.json'
@@ -107,7 +107,7 @@ def main():
     logging.basicConfig(filename=log_dir+'/validation.log', level=logging.DEBUG)
 
     package_search = PackageSearch(REGISTRY_BASE_URL, PACKAGE_SEARCH)
-    datastore_search = DataStoreSearch(REGISTRY_BASE_URL,DATASTORE_SEARCH)
+    datastore_search = DatastoreSearch(REGISTRY_BASE_URL, DATASTORE_SEARCH)
 
     rows = 30
 
@@ -119,7 +119,7 @@ def main():
         num_of_packages = package_search.get_number(type)
         num_of_retrieval = num_of_packages//rows + 1
 
-        data_validator = Data_Validator(type)
+        data_validator = DataValidator(type)
         start = 361
 
         #for the testing purpose

@@ -39,9 +39,9 @@ class ReportWithType(object):
         for table_k, table_v in tables.iteritems():
 
             if (table_v['HTTP_status'] != 'success'):
-                InternalErrorReporter.report_error("http_error " + title + ' with package id as ' + package_id
-                      + 'the message is ' + table_v['HTTP_message']
-                      + 'with resource id as ' + table_k)
+                InternalErrorReporter.report_error("http_error: " + title + ' with package id as ' + package_id
+                      + ' has ' + table_v['HTTP_message']
+                      + ' with resource id as ' + table_k)
                 continue
 
             result = table_v['result']

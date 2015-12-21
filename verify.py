@@ -1,14 +1,11 @@
 from schema import Schema
-from data_validator import Data_Validator
+from data_validator import DataValidator
 import json
-
-def experiemnt():
-    raise Exception('HTTP GET http://registry.statcan.gc.ca/api/action/datastore_search error with code 404')
 
 def main():
     Schema.set_schema_dir('schema')
 
-    data_validator = Data_Validator("contracts")
+    data_validator = DataValidator("contracts")
     record = {
           "comments_en": "For a contract with task authorizations, the realized amount of the contract is contingent on the number of task authorizations issued and may be less than the amount proactively disclosed, dependent on the operational requirements of the department.",
           "intellectual_property_code": "",
@@ -43,15 +40,8 @@ def main():
         }
 
     record['contract_value'] = '3000'
-    #result = data_validator.validate(record)
-    #print "results" + json.dumps(result)
-    try:
-        experiemnt()
-    except Exception as e:
-        a = str(e)
-        print 'error '+ a
-
-
+    result = data_validator.validate(record)
+    print "results" + json.dumps(result)
 
 if __name__ == '__main__':
     main()
