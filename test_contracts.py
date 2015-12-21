@@ -1,6 +1,6 @@
 import unittest
 import json
-from data_validator import Data_Validator
+from data_validator import DataValidator
 from schema import Schema
 
 class ValidationTests(unittest.TestCase):
@@ -9,7 +9,7 @@ class ValidationTests(unittest.TestCase):
 
         Schema.set_schema_dir('schema')
 
-        self.data_validator = Data_Validator("contracts")
+        self.data_validator = DataValidator("contracts")
         self.record = {
           "comments_en": "For a contract with task authorizations, the realized amount of the contract is contingent on the number of task authorizations issued and may be less than the amount proactively disclosed, dependent on the operational requirements of the department.",
           "intellectual_property_code": "",

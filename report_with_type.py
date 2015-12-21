@@ -14,7 +14,7 @@ class ReportWithType(object):
         InternalErrorReporter.setup(self.internal_dir)
 
         try:
-            self.package_fs= open(self.internal_dir + '/'+ type +'.json', 'w')
+            self.package_fs= open(self.internal_dir + '/'+ type +'.jsonl', 'w')
             self.general_csv_fs= open(self.external_dir +'/' + type + '_general.csv', 'wb')
             self.general_csv_writer = csv.writer(self.general_csv_fs, delimiter=',')
         except IOError:
@@ -39,9 +39,9 @@ class ReportWithType(object):
         for table_k, table_v in tables.iteritems():
 
             if (table_v['HTTP_status'] != 'success'):
-                InternalErrorReporter.report_error("http_error " + title + ' with package id as ' + package_id
-                      + 'the message is ' + table_v['HTTP_message']
-                      + 'with resource id as ' + table_k)
+                InternalErrorReporter.report_error("http_error: " + title + ' with package id as ' + package_id
+                      + ' has ' + table_v['HTTP_message']
+                      + ' with resource id as ' + table_k)
                 continue
 
             result = table_v['result']
@@ -75,8 +75,6 @@ class ReportWithType(object):
                 row_index = 1;
 
                 print "records: " + json.dumps(result['records_detail'])
-
-                record_index = 0;
 
                 for record in result['records_detail']:
 

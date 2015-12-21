@@ -1,7 +1,7 @@
 from rule import Rule
 from schema import Schema
 
-class Data_Validator(object):
+class DataValidator(object):
 
     """
     This is the definition of the class for validating the data stored in an array
