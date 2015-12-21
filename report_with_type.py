@@ -11,6 +11,7 @@ class ReportWithType(object):
         os.makedirs(self.internal_dir)
         self.external_dir = external_dir + '/' + type
         os.makedirs(self.external_dir)
+        InternalErrorReporter.setup(self.internal_dir)
 
         try:
             self.package_fs= open(self.internal_dir + '/'+ type +'.json', 'w')
@@ -39,7 +40,7 @@ class ReportWithType(object):
 
             if (table_v['HTTP_status'] != 'success'):
                 InternalErrorReporter.report_error("http_error " + title + ' with package id as ' + package_id
-                      + 'the message is ' + table_v['HTTP_status']['HTTP_message']
+                      + 'the message is ' + table_v['HTTP_message']
                       + 'with resource id as ' + table_k)
                 continue
 

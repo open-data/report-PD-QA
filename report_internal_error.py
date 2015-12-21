@@ -11,7 +11,7 @@ class InternalErrorReporter(object):
 
     @classmethod
     def report_error(cls,msg):
-        cls.error_fs.write(msg)
+        cls.error_fs.write(msg+'\n')
 
     @classmethod
     def close_error_file(cls):
