@@ -116,15 +116,19 @@ def main():
         reporter.init_report_for_type(type)
 
         # retrieve the information of tables in registry using package_search api
-        num_of_retrieval = package_search.get_number(type)//rows + 1
+        num_of_packages = package_search.get_number(type)
+        num_of_retrieval = num_of_packages//rows + 1
 
         data_validator = Data_Validator(type)
-        start = 1
+        start = 361
 
         #for the testing purpose
         #num_of_retrieval =1
 
         for iteration in range(0,num_of_retrieval):
+
+            if start > num_of_packages:
+                break
 
             print 'start id: ' + str(start)
 

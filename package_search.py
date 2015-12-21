@@ -21,8 +21,7 @@ class PackageSearch(object):
             r_json = r.json()
             return r_json
         else:
-            message = 'HTTP GET ' + url + 'error with code ' + r.status_code
-            print (message)
+            message = 'HTTP GET ' + url + 'error with code ' + str(r.status_code)
             raise Exception(message)
 
     def get_number(self, type):
