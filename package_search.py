@@ -10,7 +10,7 @@ class PackageSearch(object):
 
     def get_request(self, url, params, api_key=None):
 
-        time.sleep(10)
+        time.sleep(1)
 
         if (api_key is None):
             r=requests.get(url, params=params)
@@ -21,8 +21,7 @@ class PackageSearch(object):
             r_json = r.json()
             return r_json
         else:
-            message = 'HTTP GET ' + url + 'error with code ' + r.status_code
-            print (message)
+            message = 'HTTP GET ' + url + 'error with code ' + str(r.status_code)
             raise Exception(message)
 
     def get_number(self, type):
