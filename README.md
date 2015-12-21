@@ -14,4 +14,4 @@ A conditional proposition contains antecedent and consequent. Both of them furth
 
 The output from the data validation are stored in the files in two different directories: internal_report and external_report. These files are further organized according to the running time of the data validation. The internal_report stores the files for the purpose of internal usage, for example, those data generated in the middle of the running and the messages of errors occurring. The external_report stores the report files, e.g., a general csv file, and a csv file and a txt file for a department that has the data of that type.
 
-This prackage also contains two files for unit testing. The file test_contracts.py verifies the correctness of the validation, and test_report.py verifies the formats of output.
+This prackage also contains two files for unit testing. The file test_contracts.py verifies the correctness of the validation, and test_report.py verifies the formats of output files.
