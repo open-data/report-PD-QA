@@ -14,7 +14,6 @@ class Report(object):
         self.log_dir = self.internal_dir+'/log'
         os.makedirs(self.log_dir)
         os.makedirs(self.external_dir)
-        InternalErrorReporter.setup(self.internal_dir)
 
     def get_log_dir(self):
         return self.log_dir
@@ -44,12 +43,11 @@ class Report(object):
         self.report_with_type.report_organizations(self.organizations)
         self.report_with_type.close_general_csv()
         self.report_with_type.close_package_file()
+        InternalErrorReporter.close_error_file()
 
+    #used by the unit testing defined in test_report.py
     def generate_report(self, packages, type, schema):
         self.init_report_for_type(type)
         for key, value in packages.iteritems():
             self.report_package(id=key,value=value,type=type, schema=schema)
         self.stop_report_for_type()
-
-    def stop_report(self):
-        InternalErrorReporter.close_error_file()

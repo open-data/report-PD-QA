@@ -113,6 +113,8 @@ def main():
 
     for type in env['types']:
 
+        reporter.init_report_for_type(type)
+
         # retrieve the information of tables in registry using package_search api
         num_of_retrieval = package_search.get_number(type)//rows + 1
 
@@ -121,8 +123,6 @@ def main():
 
         #for the testing purpose
         #num_of_retrieval =1
-
-        reporter.init_report_for_type(type)
 
         for iteration in range(0,num_of_retrieval):
 
