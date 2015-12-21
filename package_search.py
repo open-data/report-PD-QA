@@ -10,7 +10,7 @@ class PackageSearch(object):
 
     def get_request(self, url, params, api_key=None):
 
-        time.sleep(10)
+        time.sleep(1)
 
         if (api_key is None):
             r=requests.get(url, params=params)
