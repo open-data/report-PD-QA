@@ -120,7 +120,7 @@ def main():
         num_of_retrieval = num_of_packages//rows + 1
 
         data_validator = DataValidator(type)
-        start = 361
+        start = 1
 
         #for the testing purpose
         #num_of_retrieval =1
