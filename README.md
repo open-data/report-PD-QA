@@ -4,7 +4,7 @@ This package implements a data validation function. The function validates the d
 
 The main function of the data validation is defined as main() in datastore_validation.py. The main() sets up the running environment using env.json. It retrieves the data from opendata.ca and validates them using their schema.
 
-The env.json specifies the parameters (e.g., api_key, the types of data, and the directories) used by the data validation. env.json.example is an example of such a file.
+The env.json specifies the parameters (e.g., api_key, the types of data, and the directories) used by the data validation. The file env.json.example is an example of such a file.
 
 The schema files define the column structures of different data types. A schema file contain the validation rules for each column. The data validation uses those rules to verify the correctness and meanfulness of data that are identified with those columns.
 
@@ -14,4 +14,4 @@ A conditional proposition contains antecedent and consequent. Both of them furth
 
 The output from the data validation are stored in the files in two different directories: internal_report and external_report. These files are further organized according to the running time of the data validation. The internal_report stores the files for the purpose of internal usage, for example, those data generated in the middle of the running and the messages of errors occurring. The external_report stores the report files, e.g., a general csv file, and a csv file and a txt file for a department that has the data of that type.
 
-This prackage also contains two files for unit testing. One file verifies the correctness of the validation, and another verifies the formats of output.
+This prackage also contains two files for unit testing. The file test_contracts.py verifies the correctness of the validation, and test_report.py verifies the formats of output.
