@@ -62,7 +62,7 @@ class ReportWithType(object):
                 # the header is the labeld of the fields contained in the schema
                 # one row for one record
                 header_row=[]
-                header_row.append('Row Number (Reference Number)')
+                header_row.append('Row Number (i.e. Reference Number)')
                 department_error = {}
 
                 for column in schema:
