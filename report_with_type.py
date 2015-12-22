@@ -62,7 +62,6 @@ class ReportWithType(object):
                 # the header is the labeld of the fields contained in the schema
                 # one row for one record
                 header_row=[]
-                header_row.append('id')
 
                 department_error = {}
 
@@ -72,15 +71,13 @@ class ReportWithType(object):
 
                 department_csv_writer.writerow(header_row)
 
-                row_index = 1;
-
                 print "records: " + json.dumps(result['records_detail'])
 
                 for record in result['records_detail']:
 
                     department_row = []
 
-                    department_row.append(row_index)
+                    department_row.append(record['Reference Number Key'])
 
                     column_index = 0
 
@@ -95,13 +92,13 @@ class ReportWithType(object):
                             case = record[column_key]['case']
                             if case not in department_error[column_key]:
                                 department_error[column_key][case] = []
-                            department_error[column_key][case].append(row_index)
+                            department_error[column_key][case].append(record['Reference Number Key'])
                             department_row.append(column['validation errors'][case]['type'])
                         else:
                             department_row.append(record[column_key]['status'])
                         column_index += 1
                     department_csv_writer.writerow(department_row)
-                    row_index += 1
+
                 department_csv_fs.close()
                 self.write_error(department_error_fs, department_error,schema, general_row)
                 department_error_fs.close()
