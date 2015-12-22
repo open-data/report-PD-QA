@@ -21,6 +21,8 @@ class DataValidator(object):
         """
         results = {}
 
+        results['Reference Number Key'] = record['ref_number']
+
         for column in self.schema:
             self.validate_column(record=record, results=results, column=column)
 
