@@ -116,7 +116,8 @@ def main():
         reporter.init_report_for_type(type)
 
         # retrieve the information of tables in registry using package_search api
-        num_of_packages = package_search.get_number(type)
+        #num_of_packages = package_search.get_number(type)
+        num_of_packages = 30
         num_of_retrieval = num_of_packages//rows + 1
 
         data_validator = DataValidator(type)
